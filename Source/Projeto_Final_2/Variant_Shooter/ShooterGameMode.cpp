@@ -31,3 +31,8 @@ void AShooterGameMode::IncrementTeamScore(uint8 TeamByte)
 	// update the UI
 	ShooterUI->BP_UpdateScore(TeamByte, Score);
 }
+void AShooterGameMode::UpdateTimer(int32 NewTimer)
+{
+	timer = NewTimer;
+}
+

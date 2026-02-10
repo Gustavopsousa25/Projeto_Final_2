@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/ProgressBar.h"
 #include "HealthBarWidget.generated.h"
 
 /**
@@ -15,7 +16,7 @@ class PROJETO_FINAL_2_API UHealthBarWidget : public UUserWidget
 	GENERATED_BODY()
 	
 	public : 
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health Components", meta = (BindWidget))
-		TObjectPtr<UProgressBar> HealthProgressBar;
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health Components", meta = (BindWidget));
+		TObjectPtr<UProgressBar> MyHealthProgressBar;
 	
 };

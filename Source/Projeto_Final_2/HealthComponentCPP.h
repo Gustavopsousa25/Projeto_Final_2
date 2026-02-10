@@ -19,6 +19,8 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	int32 currentHealth;
+	int32 MaxHealth;
 
 public:	
 	// Called every frame

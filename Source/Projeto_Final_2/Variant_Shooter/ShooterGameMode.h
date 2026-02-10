@@ -29,6 +29,10 @@ protected:
 
 	/** Map of scores by team ID */
 	TMap<uint8, int32> TeamScores;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Shooter")
+	int32 currentScore;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Shooter")
+	int32 timer;
 
 protected:
 
@@ -39,4 +43,5 @@ public:
 
 	/** Increases the score for the given team */
 	void IncrementTeamScore(uint8 TeamByte);
+	void UpdateTimer(int32 NewTimer);
 };
