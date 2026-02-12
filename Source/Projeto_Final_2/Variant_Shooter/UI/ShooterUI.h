@@ -17,8 +17,8 @@ class PROJETO_FINAL_2_API UShooterUI : public UUserWidget
 public:
 
 	/** Allows Blueprint to update score sub-widgets */
-	UFUNCTION(BlueprintImplementableEvent, Category="Shooter", meta = (DisplayName = "Update Score"))
-	void BP_UpdateScore(uint8 TeamByte, int32 Score);
 	UFUNCTION(BlueprintImplementableEvent, Category="Shooter", meta = (DisplayName = "Update Timer"))
-	void UpdateTimer(int32 time);
+	void UpdateTimer(float time);
+	UFUNCTION(BlueprintImplementableEvent, Category="Shooter", meta = (DisplayName = "Update Score"))
+	void BP_UpdateScore(int32 Score);
 };

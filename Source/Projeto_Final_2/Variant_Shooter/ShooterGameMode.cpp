@@ -3,36 +3,34 @@
 
 #include "Variant_Shooter/ShooterGameMode.h"
 #include "ShooterUI.h"
+#include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "Engine/World.h"
 
 void AShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// create the UI
-	ShooterUI = CreateWidget<UShooterUI>(UGameplayStatics::GetPlayerController(GetWorld(), 0), ShooterUIClass);
-	ShooterUI->AddToViewport(0);
+	ShooterUI = CreateWidget<UShooterUI>(UGameplayStatics::GetPlayerController(this, 0), ShooterUIClass);
+	FTimerHandle myTimer;
+	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &AShooterGameMode::StartTimer, 1.0f, true);
+	ShooterUI->AddToViewport();
+	ShooterUI->BP_UpdateScore(0);
 }
 
-void AShooterGameMode::IncrementTeamScore(uint8 TeamByte)
+void AShooterGameMode::IncrementTimer(float NewTimer)
 {
-	// retrieve the team score if any
-	int32 Score = 0;
-	if (int32* FoundScore = TeamScores.Find(TeamByte))
-	{
-		Score = *FoundScore;
-	}
-
-	// increment the score for the given team
-	++Score;
-	TeamScores.Add(TeamByte, Score);
-
-	// update the UI
-	ShooterUI->BP_UpdateScore(TeamByte, Score);
+	timer = FMath::RoundToInt32(NewTimer + timer);
 }
-void AShooterGameMode::UpdateTimer(int32 NewTimer)
+void AShooterGameMode::IncrementScore(int32 newScore)
 {
-	timer = NewTimer;
+	currentScore = currentScore + newScore;
+	currentScore = FMath::Clamp(currentScore, 0, 9999);
+	ShooterUI->BP_UpdateScore(currentScore);
+}
+void AShooterGameMode::StartTimer()
+{
+	timer--;
+	timer = FMath::Clamp(timer, 0,timer);
+	ShooterUI->UpdateTimer(timer);
 }
 

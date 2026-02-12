@@ -43,5 +43,12 @@ public:
 
 	/** Increases the score for the given team */
 	void IncrementTeamScore(uint8 TeamByte);
-	void UpdateTimer(int32 NewTimer);
+	void UpdateTimer(float NewTimer);
+	UFUNCTION(BlueprintCallable, Category = "ShooterGameMode")
+	void IncrementScore(int32 newScore);
+	UFUNCTION(BlueprintCallable, Category = "ShooterGameMode")
+	void IncrementTimer(float value);
+private:
+	UFUNCTION(BlueprintCallable, Category = "Timer")
+	void StartTimer();
 };
