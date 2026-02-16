@@ -5,6 +5,7 @@
 #include "ShooterUI.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameOverWidget.h"
 
 void AShooterGameMode::BeginPlay()
 {
@@ -12,6 +13,7 @@ void AShooterGameMode::BeginPlay()
 	// create the UI
 	ShooterUI = CreateWidget<UShooterUI>(UGameplayStatics::GetPlayerController(this, 0), ShooterUIClass);
 	FTimerHandle myTimer;
+	ShooterUI->TimerEnded.AddDynamic(this, &AShooterGameMode::OnTimerEnded);
 	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &AShooterGameMode::StartTimer, 1.0f, true);
 	ShooterUI->AddToViewport();
 	ShooterUI->BP_UpdateScore(0);
@@ -32,5 +34,30 @@ void AShooterGameMode::StartTimer()
 	timer--;
 	timer = FMath::Clamp(timer, 0,timer);
 	ShooterUI->UpdateTimer(timer);
+	if(timer <= 0)
+	{
+		ShooterUI->TimerEnded.Broadcast();
+	}
+}
+void AShooterGameMode::IncrementTeamScore(uint8 teamId)
+{
+
+}
+
+void AShooterGameMode::OnTimerEnded()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	ShooterUI->RemoveFromParent();
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	GameOverWidget = CreateWidget<UGameOverWidget>(PC, GameOverWidgetClass);
+	if (GameOverWidget)
+	{
+		GameOverWidget->AddToViewport();
+		GameOverWidget->UpdateFinalScore(currentScore);
+	}
+
+	PC->SetShowMouseCursor(true);
+	FInputModeUIOnly InputMode;
+	PC->SetInputMode(InputMode);
 }
 

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "ShooterUI.h"
+#include "GameOverWidget.h"
 #include "ShooterGameMode.generated.h"
 
 class UShooterUI;
@@ -48,6 +50,13 @@ public:
 	void IncrementScore(int32 newScore);
 	UFUNCTION(BlueprintCallable, Category = "ShooterGameMode")
 	void IncrementTimer(float value);
+	UFUNCTION(BlueprintCallable, Category = "ShooterGameMode")
+	void OnTimerEnded();
+	UPROPERTY(EditAnywhere, Category = "Shooter")
+	TSubclassOf<UGameOverWidget> GameOverWidgetClass;
+
+	UPROPERTY()
+	UGameOverWidget* GameOverWidget;
 private:
 	UFUNCTION(BlueprintCallable, Category = "Timer")
 	void StartTimer();

@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 
 #include "Variant_Shooter/ShooterPlayerController.h"
@@ -54,23 +54,35 @@ void AShooterPlayerController::BeginPlay()
 
 void AShooterPlayerController::SetupInputComponent()
 {
-	// only add IMCs for local player controllers
+	Super::SetupInputComponent();
+
 	if (IsLocalPlayerController())
 	{
-		// add the input mapping contexts
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 		{
+			// IMC_Default      → priority 0
+			// IMC_Weapons      → priority 1  
+			// CustomInputMapping → priority 2  ← o teu pause input
+			int32 Priority = 0;
 			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
 			{
-				Subsystem->AddMappingContext(CurrentContext, 0);
+				if (CurrentContext)
+				{
+					Subsystem->AddMappingContext(CurrentContext, Priority);
+					Priority++;
+				}
 			}
 
-			// only add these IMCs if we're not using mobile touch input
 			if (!SVirtualJoystick::ShouldDisplayTouchInterface())
 			{
 				for (UInputMappingContext* CurrentContext : MobileExcludedMappingContexts)
 				{
-					Subsystem->AddMappingContext(CurrentContext, 0);
+					if (CurrentContext)
+					{
+						Subsystem->AddMappingContext(CurrentContext, Priority);
+						Priority++;
+					}
 				}
 			}
 		}
